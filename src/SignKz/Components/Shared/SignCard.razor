@@ -1,0 +1,53 @@
+<div class="card sign-card">
+    <div class="sign-head">
+        <div>
+            @if (Sign.HasImage)
+            {
+                <h3>@Sign.Title</h3>
+            }
+            @if (Sign.Subtitle.Length > 0)
+            {
+                <small>@Sign.Subtitle</small>
+            }
+        </div>
+        @if (Learned)
+        {
+            <span class="chip ok">✓ Learned</span>
+        }
+    </div>
+
+    <SignVisual Sign="Sign" />
+
+    @if (Sign.Description.Length > 0)
+    {
+        <p class="muted">@Sign.Description</p>
+    }
+
+    <div class="chips">
+        @if (Sign.HasCameraCheck)
+        {
+            <span class="chip">📷 Camera check</span>
+            @if (!Sign.IsVerified)
+            {
+                <span class="chip warn" title="This hand shape has not been checked with an official source yet.">Unverified</span>
+            }
+        }
+        else
+        {
+            <span class="chip">✋ Self check</span>
+        }
+    </div>
+
+    <div class="card-actions">
+        <a class="btn small" href="practice/@Sign.Id">Practice</a>
+        @if (Sign.HasVideo)
+        {
+            <a class="btn small ghost" href="@Sign.VideoUrl" target="_blank" rel="noopener noreferrer">▶ Watch video</a>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public Sign Sign { get; set; } = new Sign();
+    [Parameter] public bool Learned { get; set; }
+}

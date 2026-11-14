@@ -1,0 +1,63 @@
+@page "/leaderboard"
+@implements IDisposable
+@inject ProgressService Progress
+@inject UserState User
+
+<PageTitle>Leaderboard - SignKz</PageTitle>
+
+<div class="page-head">
+    <div>
+        <h1>Leaderboard</h1>
+        <p class="muted">Updates live: when someone earns points you see it without refreshing.</p>
+    </div>
+    <span class="chip ok">● Live</span>
+</div>
+
+@if (_top.Count == 0)
+{
+    <div class="empty">No players yet. Be the first!</div>
+}
+else
+{
+    <div class="board">
+        @for (int i = 0; i < _top.Count; i++)
+        {
+            UserProgress user = _top[i];
+            <div class="board-row @(user.Name == User.Name ? "me" : "")">
+                <span class="rank">@(i == 0 ? "🥇" : i == 1 ? "🥈" : i == 2 ? "🥉" : (i + 1).ToString())</span>
+                <span class="avatar">@user.Avatar</span>
+                <span class="board-name">
+                    <b>@user.Name</b>
+                    <small>Lv.@LevelCalculator.Get(user.Points).Number @LevelCalculator.Get(user.Points).Name</small>
+                </span>
+                <span class="board-streak">🔥 @user.StreakDays</span>
+                <span class="board-points">@user.Points <small>pts</small></span>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<UserProgress> _top = new List<UserProgress>();
+
+    protected override void OnInitialized()
+    {
+        _top = Progress.GetTop(10);
+        Progress.Changed += OnProgressChanged;
+    }
+
+    // Runs on another thread, so we must use InvokeAsync to update the screen.
+    private void OnProgressChanged()
+    {
+        InvokeAsync(() =>
+        {
+            _top = Progress.GetTop(10);
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        Progress.Changed -= OnProgressChanged;
+    }
+}

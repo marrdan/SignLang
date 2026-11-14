@@ -1,0 +1,136 @@
+@page "/login"
+@inject ProgressService Progress
+@inject UserState User
+@inject ProtectedLocalStorage Storage
+@inject NavigationManager Nav
+
+<PageTitle>Sign in - SignKz</PageTitle>
+
+<div class="auth">
+    <div class="auth-hero">
+        <span class="brand-icon big-icon">🤟</span>
+        <h1>Welcome to Sign<span>Kz</span></h1>
+        <p class="lead light">Your sign language journey starts here.</p>
+        <ul class="auth-points">
+            <li>📷 Live feedback from your camera</li>
+            <li>🔥 Daily streaks and levels</li>
+            <li>🏅 Badges and a global leaderboard</li>
+            <li>🔢 Numbers 1-10 and the English alphabet A-Z</li>
+        </ul>
+    </div>
+
+    <div class="auth-card">
+        <div class="tabs">
+            <button type="button" class="tab @(_isRegister ? "" : "active")" @onclick="() => SetMode(false)">Sign in</button>
+            <button type="button" class="tab @(_isRegister ? "active" : "")" @onclick="() => SetMode(true)">Create account</button>
+        </div>
+
+        @if (_isRegister)
+        {
+            <p class="muted">Pick a name, a password and an avatar. Your progress is protected by the password.</p>
+        }
+        else
+        {
+            <p class="muted">Welcome back! Enter your name and password to continue.</p>
+        }
+
+        <label class="label" for="name">Your name</label>
+        <input id="name" class="input" placeholder="For example: Aida" maxlength="20" autocomplete="username"
+               @bind="_name" @bind:event="oninput" @onkeydown="OnKeyDown" />
+
+        <label class="label" for="password">Password</label>
+        <div class="pass-row">
+            <input id="password" class="input" type="@(_show ? "text" : "password")" maxlength="64"
+                   placeholder="At least 6 characters" autocomplete="@(_isRegister ? "new-password" : "current-password")"
+                   @bind="_password" @bind:event="oninput" @onkeydown="OnKeyDown" />
+            <button type="button" class="btn ghost small" @onclick="() => _show = !_show">@(_show ? "Hide" : "Show")</button>
+        </div>
+
+        @if (_isRegister)
+        {
+            <label class="label" for="confirm">Repeat password</label>
+            <input id="confirm" class="input" type="@(_show ? "text" : "password")" maxlength="64"
+                   autocomplete="new-password" @bind="_confirm" @bind:event="oninput" @onkeydown="OnKeyDown" />
+
+            <span class="label">Choose an avatar</span>
+            <div class="avatar-grid">
+                @foreach (string avatar in Avatars.All)
+                {
+                    <button type="button" class="avatar-btn @(avatar == _avatar ? "selected" : "")"
+                            @onclick="() => _avatar = avatar">@avatar</button>
+                }
+            </div>
+        }
+
+        @if (_error != "")
+        {
+            <p class="error-text">@_error</p>
+        }
+
+        <button class="btn big full" @onclick="Submit">@(_isRegister ? "Create account →" : "Sign in →")</button>
+
+        @if (_isRegister)
+        {
+            <p class="muted small-text center">Already have an account? <a href="login" @onclick:preventDefault @onclick="() => SetMode(false)">Sign in</a></p>
+        }
+        else
+        {
+            <p class="muted small-text center">
+                New here? <a href="login" @onclick:preventDefault @onclick="() => SetMode(true)">Create an account</a>.
+                Old account without a password? Sign in with any new password (6+ characters) to set it.
+            </p>
+        }
+    </div>
+</div>
+
+@code {
+    private bool _isRegister;
+    private bool _show;
+    private string _name = "";
+    private string _password = "";
+    private string _confirm = "";
+    private string _avatar = Avatars.Default;
+    private string _error = "";
+
+    private void SetMode(bool register)
+    {
+        _isRegister = register;
+        _error = "";
+        _password = "";
+        _confirm = "";
+    }
+
+    private async Task OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await Submit();
+        }
+    }
+
+    private async Task Submit()
+    {
+        try
+        {
+            UserProgress progress;
+            if (_isRegister)
+            {
+                progress = Progress.Register(_name, _password, _confirm, _avatar);
+            }
+            else
+            {
+                progress = Progress.Login(_name, _password);
+            }
+
+            User.SetName(progress.Name);
+            await Storage.SetAsync("userName", progress.Name);
+            Nav.NavigateTo("lessons");
+        }
+        catch (ArgumentException ex)
+        {
+            _error = ex.Message;
+            _password = "";
+            _confirm = "";
+        }
+    }
+}

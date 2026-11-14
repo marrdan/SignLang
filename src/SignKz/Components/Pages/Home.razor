@@ -1,0 +1,112 @@
+@page "/"
+@inject ISignRepository Signs
+@inject UserState User
+
+<PageTitle>SignKz - Learn sign language</PageTitle>
+
+<section class="hero">
+    <div class="hero-text">
+        <span class="pill">✨ Learn with your camera</span>
+        <h1>Learn sign language,<br /><span class="gradient-text">one gesture at a time.</span></h1>
+        <p class="lead">
+            Show a sign to your webcam and get instant feedback. Study numbers and the alphabet,
+            earn points, keep your streak and climb the leaderboard.
+        </p>
+        <div class="hero-actions">
+            @if (User.IsLoggedIn)
+            {
+                <a class="btn big" href="lessons">Continue learning</a>
+            }
+            else
+            {
+                <a class="btn big" href="login">Get started - it's free</a>
+            }
+            <a class="btn big ghost" href="quiz">Try the quiz</a>
+        </div>
+        <div class="hero-stats">
+            <div><b>@_numbers</b><span>numbers</span></div>
+            <div><b>@_letters</b><span>letters</span></div>
+            <div><b>3</b><span>ways to learn</span></div>
+        </div>
+    </div>
+
+    <div class="hero-art">
+        <div class="blob"></div>
+        <span class="float h1">🤟</span>
+        <span class="float h2">👋</span>
+        <span class="float h3">✌️</span>
+        <span class="float h4">👌</span>
+        <span class="float h5">🖐️</span>
+    </div>
+</section>
+
+<section class="section">
+    <h2>How it works</h2>
+    <div class="grid three">
+        <div class="card feature">
+            <div class="feature-icon">📖</div>
+            <h3>1. Learn</h3>
+            <p class="muted">Browse numbers and letters with photos and videos.</p>
+        </div>
+        <div class="card feature">
+            <div class="feature-icon">📷</div>
+            <h3>2. Practice</h3>
+            <p class="muted">Show the sign to your camera. The site sees your hand and checks it live.</p>
+        </div>
+        <div class="card feature">
+            <div class="feature-icon">🏆</div>
+            <h3>3. Compete</h3>
+            <p class="muted">Take quizzes, collect badges and see your name on the leaderboard.</p>
+        </div>
+    </div>
+</section>
+
+@if (_today != null)
+{
+    <section class="section">
+        <h2>Sign of the day</h2>
+        <div class="card today">
+            <div class="today-visual"><SignVisual Sign="_today" /></div>
+            <div class="today-info">
+                <span class="pill">Today</span>
+                <h2 class="today-title">@_today.Title</h2>
+                @if (_today.Subtitle.Length > 0)
+                {
+                    <p class="muted">@_today.Subtitle</p>
+                }
+                @if (_today.Description.Length > 0)
+                {
+                    <p>@_today.Description</p>
+                }
+                <a class="btn" href="practice/@_today.Id">Practice it now</a>
+            </div>
+        </div>
+    </section>
+}
+
+<div class="notice">
+    <b>Note:</b> the hand shapes in this app are study examples and have not been verified with an official
+    sign language source yet. Check them with a teacher before relying on them.
+</div>
+
+@code {
+    private Sign? _today;
+    private int _numbers;
+    private int _letters;
+
+    protected override void OnInitialized()
+    {
+        List<Sign> all = Signs.GetAll();
+
+        foreach (Sign sign in all)
+        {
+            if (sign.Category == "Numbers") _numbers++;
+            if (sign.Category == "Alphabet") _letters++;
+        }
+
+        if (all.Count > 0)
+        {
+            _today = all[DateTime.UtcNow.DayOfYear % all.Count];
+        }
+    }
+}

@@ -1,0 +1,88 @@
+@page "/lessons"
+@inject ISignRepository Signs
+@inject ProgressService Progress
+@inject UserState User
+
+<PageTitle>Learn - SignKz</PageTitle>
+
+<div class="page-head">
+    <div>
+        <h1>Learn</h1>
+        <p class="muted">Study every sign, then practice it with your camera.</p>
+    </div>
+    <input class="input search" placeholder="Search..." @bind="_search" @bind:event="oninput" />
+</div>
+
+@if (!User.IsLoggedIn)
+{
+    <LoginNotice />
+}
+
+<div class="tabs">
+    @foreach (string tab in _tabs)
+    {
+        <button class="tab @(tab == _tab ? "active" : "")" @onclick="() => _tab = tab">@tab</button>
+    }
+</div>
+
+@{
+    List<Sign> visible = GetVisible();
+}
+
+@if (visible.Count == 0)
+{
+    <div class="empty">Nothing found. Try a different search.</div>
+}
+else
+{
+    <div class="grid">
+        @foreach (Sign sign in visible)
+        {
+            <SignCard Sign="sign" Learned="_learned.Contains(sign.Id)" />
+        }
+    </div>
+}
+
+@code {
+    private List<Sign> _signs = new List<Sign>();
+    private List<string> _learned = new List<string>();
+    private readonly string[] _tabs = { "All", "Numbers", "Alphabet" };
+    private string _tab = "All";
+    private string _search = "";
+
+    protected override void OnInitialized()
+    {
+        _signs = Signs.GetAll();
+
+        if (User.IsLoggedIn)
+        {
+            UserProgress? progress = Progress.Get(User.Name);
+            if (progress != null)
+            {
+                _learned = progress.LearnedSigns;
+            }
+        }
+    }
+
+    private List<Sign> GetVisible()
+    {
+        List<Sign> result = new List<Sign>();
+        string search = _search.Trim().ToLower();
+
+        foreach (Sign sign in _signs)
+        {
+            if (_tab != "All" && sign.Category != _tab) continue;
+
+            if (search.Length > 0)
+            {
+                bool found = sign.Title.ToLower().Contains(search)
+                    || sign.Subtitle.ToLower().Contains(search)
+                    || sign.Id.ToLower().Contains(search);
+                if (!found) continue;
+            }
+
+            result.Add(sign);
+        }
+        return result;
+    }
+}

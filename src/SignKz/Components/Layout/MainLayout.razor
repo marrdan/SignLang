@@ -1,0 +1,133 @@
+@inherits LayoutComponentBase
+@implements IDisposable
+@inject UserState User
+@inject ProgressService Progress
+@inject ProtectedLocalStorage Storage
+@inject NavigationManager Nav
+
+<header class="topbar">
+    <div class="topbar-inner">
+        <a class="brand" href="">
+            <span class="brand-icon">🤟</span>
+            <span class="brand-name">Sign<span>Kz</span></span>
+        </a>
+
+        <nav class="nav">
+            <NavLink href="" Match="NavLinkMatch.All">Home</NavLink>
+            <NavLink href="lessons">Learn</NavLink>
+            <NavLink href="guide">Guide</NavLink>
+            <NavLink href="practice">Practice</NavLink>
+            <NavLink href="quiz">Quiz</NavLink>
+            <NavLink href="leaderboard">Leaderboard</NavLink>
+            <NavLink href="progress">Profile</NavLink>
+        </nav>
+
+        <div class="user-box">
+            @if (User.IsLoggedIn)
+            {
+                <a class="user-chip" href="progress">
+                    <span class="avatar">@_avatar</span>
+                    <span class="user-text">
+                        <b>@User.Name</b>
+                        <small>@_levelName</small>
+                    </span>
+                </a>
+                <button class="btn ghost small" @onclick="Logout">Sign out</button>
+            }
+            else
+            {
+                <a class="btn small" href="login">Sign in</a>
+            }
+        </div>
+    </div>
+</header>
+
+<main class="content">
+    @if (_ready)
+    {
+        @Body
+    }
+    else
+    {
+        <div class="loading"><div class="spinner"></div></div>
+    }
+</main>
+
+<footer class="footer">
+    SignKz &middot; learn sign language with your camera
+</footer>
+
+@code {
+    private bool _ready;
+    private string _avatar = Avatars.Default;
+    private string _levelName = "";
+
+    protected override void OnInitialized()
+    {
+        User.Changed += OnUserChanged;
+        Progress.Changed += OnUserChanged;
+    }
+
+    private void OnUserChanged()
+    {
+        InvokeAsync(() =>
+        {
+            LoadUserInfo();
+            StateHasChanged();
+        });
+    }
+
+    private void LoadUserInfo()
+    {
+        if (!User.IsLoggedIn) return;
+
+        UserProgress? progress = Progress.Get(User.Name);
+        if (progress != null)
+        {
+            _avatar = progress.Avatar;
+            _levelName = "Lv." + LevelCalculator.Get(progress.Points).Number + " " + LevelCalculator.Get(progress.Points).Name;
+        }
+    }
+
+    // Restore the name from the browser, so the user stays signed in after a page refresh.
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        try
+        {
+            var result = await Storage.GetAsync<string>("userName");
+            if (result.Success && !string.IsNullOrWhiteSpace(result.Value))
+            {
+                // The value is protected (encrypted) by ASP.NET, so the browser cannot change it.
+                // Get() does not create users, so a deleted account cannot come back by itself.
+                UserProgress? progress = Progress.Get(result.Value);
+                if (progress != null)
+                {
+                    User.SetName(progress.Name);
+                }
+            }
+        }
+        catch (Exception)
+        {
+            // The saved value is broken or cannot be read. The user can sign in again.
+        }
+
+        LoadUserInfo();
+        _ready = true;
+        StateHasChanged();
+    }
+
+    private async Task Logout()
+    {
+        User.Clear();
+        await Storage.DeleteAsync("userName");
+        Nav.NavigateTo("");
+    }
+
+    public void Dispose()
+    {
+        User.Changed -= OnUserChanged;
+        Progress.Changed -= OnUserChanged;
+    }
+}

@@ -1,0 +1,273 @@
+@page "/practice"
+@page "/practice/{SignId}"
+@inject ISignRepository Signs
+@inject ProgressService Progress
+@inject UserState User
+@inject IGestureRecognizer Recognizer
+
+<PageTitle>Practice - SignKz</PageTitle>
+
+@if (!User.IsLoggedIn)
+{
+    <h1>Practice</h1>
+    <LoginNotice />
+}
+else if (_target == null)
+{
+    <div class="page-head">
+        <div>
+            <h1>Practice</h1>
+            <p class="muted">Choose a sign. 📷 = the camera checks it for you. ✋ = you compare with the picture and confirm.</p>
+        </div>
+    </div>
+
+    @foreach (string category in _categories)
+    {
+        <h2>@category</h2>
+        <div class="choice-list">
+            @foreach (Sign sign in _all)
+            {
+                if (sign.Category == category)
+                {
+                    <a class="choice" href="practice/@sign.Id">
+                        <b>@sign.Title</b>
+                        <small>@(sign.HasCameraCheck ? "📷" : "✋")</small>
+                    </a>
+                }
+            }
+        </div>
+    }
+}
+else
+{
+    <div class="page-head">
+        <div>
+            <a class="back" href="practice">← All signs</a>
+            <h1>Show: @_target.Title</h1>
+        </div>
+        <span class="chip big-chip">@(_target.HasCameraCheck ? "📷 Camera check" : "✋ Self check")</span>
+    </div>
+
+    <div class="practice">
+        <div class="card">
+            <SignVisual Sign="_target" />
+            @if (_target.Description.Length > 0)
+            {
+                <p>@_target.Description</p>
+            }
+            @if (_target.HasSteps)
+            {
+                <ol class="guide-steps">
+                    @foreach (string step in _target.Steps)
+                    {
+                        <li>@step</li>
+                    }
+                </ol>
+            }
+            @if (_target.HasVideo)
+            {
+                <a class="btn small ghost" href="@_target.VideoUrl" target="_blank" rel="noopener noreferrer">▶ Watch video</a>
+            }
+            @if (_target.HasCameraCheck && !_target.IsVerified)
+            {
+                <p class="muted small-text">This hand shape has not been verified with an official source yet.</p>
+            }
+        </div>
+
+        <div class="card">
+            <GestureCamera OnPose="HandlePose" />
+
+            @if (_done)
+            {
+                <div class="access granted">
+                    <div class="access-icon">🔓</div>
+                    <div class="access-title">ACCESS GRANTED</div>
+                    <p>@(_target.Category == "Alphabet" ? "Letter " : "Number ")<b>@_target.Title</b> is correct! +@_earned points</p>
+                </div>
+                <div class="card-actions">
+                    @if (_next != null)
+                    {
+                        <a class="btn" href="practice/@_next.Id">Next: @_next.Title →</a>
+                    }
+                    <a class="btn ghost" href="lessons">Back to lessons</a>
+                </div>
+            }
+            else if (_target.HasCameraCheck)
+            {
+                <div class="access @_accessClass">
+                    <div class="access-title">@_accessTitle</div>
+                    <p>@_accessText</p>
+                </div>
+                <ProgressBar Label="@(_target.Motion ? "Drawing progress" : "Hold the sign steady")" Value="_holdPercent" Max="100" />
+
+                @if (_target.Motion)
+                {
+                    <p class="muted small-text">
+                        Show the starting handshape, then draw the letter in the air. Draw slowly and big, with your palm to the camera.
+                        Not working?
+                        <a href="practice/@_target.Id" @onclick:preventDefault @onclick="ConfirmSelfCheck">Confirm by yourself (+@ProgressService.SelfCheckPoints)</a>
+                    </p>
+                }
+                else if (_target.ShapeCheck)
+                {
+                    <p class="muted small-text">
+                        Palm to the camera, good light. The camera accepts a shape that is close enough.
+                        Not sure it sees it?
+                        <a href="practice/@_target.Id" @onclick:preventDefault @onclick="ConfirmSelfCheck">Confirm by yourself (+@ProgressService.SelfCheckPoints)</a>
+                    </p>
+                }
+            }
+            else
+            {
+                <p class="muted">Copy the sign from the picture, then confirm. The camera cannot check this sign.</p>
+                <button class="btn full" @onclick="ConfirmSelfCheck">✓ I did it (+@ProgressService.SelfCheckPoints)</button>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string? SignId { get; set; }
+
+    private List<Sign> _all = new List<Sign>();
+    private List<string> _categories = new List<string>();
+    private Sign? _target;
+    private Sign? _next;
+    private readonly HoldTracker _hold = new HoldTracker(RecognizerSettings.HoldFrames);
+    private readonly MotionTracker _motion = new MotionTracker();
+    private bool _done;
+    private int _earned;
+    private int _holdPercent;
+    private string _accessClass = "idle";
+    private string _accessTitle = "SHOW YOUR HAND";
+    private string _accessText = "Put your hand in front of the camera.";
+
+    protected override void OnParametersSet()
+    {
+        _all = Signs.GetAll();
+
+        _categories = new List<string>();
+        foreach (Sign sign in _all)
+        {
+            if (!_categories.Contains(sign.Category)) _categories.Add(sign.Category);
+        }
+
+        _target = SignId == null ? null : Signs.GetById(SignId);
+        _next = FindNext();
+        _hold.Reset();
+        _motion.Reset();
+        _holdPercent = 0;
+        _done = false;
+        SetAccess("idle", "SHOW YOUR HAND", "Put your hand in front of the camera.");
+    }
+
+    private void SetAccess(string css, string title, string text)
+    {
+        _accessClass = css;
+        _accessTitle = title;
+        _accessText = text;
+    }
+
+    private Sign? FindNext()
+    {
+        if (_target == null) return null;
+
+        int index = _all.FindIndex(s => s.Id == _target.Id);
+        if (index >= 0 && index < _all.Count - 1)
+        {
+            return _all[index + 1];
+        }
+        return null;
+    }
+
+    // Called by the camera component for every frame.
+    private void HandlePose(HandPose? pose)
+    {
+        if (_done || _target == null) return;
+
+        if (pose == null)
+        {
+            SetAccess("idle", "SHOW YOUR HAND", "No hand in the picture.");
+            _hold.Update(false);
+            _motion.Miss();
+            _holdPercent = _target.Motion ? _motion.Percent(_target.Id) : _hold.Percent;
+            return;
+        }
+
+        // Signs that the camera cannot check are confirmed with the button.
+        if (!_target.HasCameraCheck) return;
+
+        if (_target.Motion)
+        {
+            HandleMotion(pose);
+            return;
+        }
+
+        // Compare only with signs of the same kind: a number and a letter can look the same to the camera.
+        List<Sign> candidates = _all.FindAll(s => s.Category == _target.Category);
+        Sign? seen = Recognizer.Recognize(pose, candidates);
+
+        // IsMatch is a little more forgiving than Recognize for the letters that are hard to show exactly.
+        bool isMatch = Recognizer.IsMatch(pose, _target, candidates);
+        bool finished = _hold.Update(isMatch);
+        _holdPercent = _hold.Percent;
+
+        if (isMatch)
+        {
+            SetAccess("match", "MATCH - HOLD IT", "Looks like " + _target.Title + ". Keep the sign steady.");
+        }
+        else if (seen != null)
+        {
+            SetAccess("denied", "ACCESS DENIED", "I see " + seen.Title + ", but you need " + _target.Title + ".");
+        }
+        else
+        {
+            SetAccess("denied", "ACCESS DENIED", "I do not recognize this sign. Try to copy the picture.");
+        }
+
+        if (finished) Finish();
+    }
+
+    // J and Z: the hand must have the starting shape, and the fingertip must draw the letter.
+    private void HandleMotion(HandPose pose)
+    {
+        if (_target == null) return;
+
+        bool shapeOk = _motion.Add(pose, _target.Id);
+        _holdPercent = _motion.Percent(_target.Id);
+
+        if (shapeOk && _motion.Detect(_target.Id))
+        {
+            Finish();
+            return;
+        }
+
+        if (shapeOk)
+        {
+            SetAccess("match", "DRAW THE LETTER", "Draw " + _target.Title + " in the air, slowly and big.");
+        }
+        else
+        {
+            string shape = _target.Id == "j" ? "Raise only your pinky (like the letter I)." : "Point with your index finger, fold the others.";
+            SetAccess("denied", "ACCESS DENIED", shape);
+        }
+    }
+
+    private void Finish()
+    {
+        if (_target == null) return;
+
+        _done = true;
+        _earned = ProgressService.PracticePoints;
+        Progress.RegisterPractice(User.Name, _target.Id);
+    }
+
+    private void ConfirmSelfCheck()
+    {
+        if (_done || _target == null) return;
+
+        _done = true;
+        _earned = ProgressService.SelfCheckPoints;
+        Progress.RegisterSelfCheck(User.Name, _target.Id);
+    }
+}

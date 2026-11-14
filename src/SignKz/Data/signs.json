@@ -1,0 +1,628 @@
+[
+  {
+    "id": "1",
+    "category": "Numbers",
+    "title": "1",
+    "subtitle": "One",
+    "description": "Only the index finger points up. The other fingers and the thumb are folded into a fist.",
+    "imageUrl": "media/first.png",
+    "videoUrl": "",
+    "pattern": "01000",
+    "shapeCheck": false,
+    "steps": [
+      "Make a fist.",
+      "Raise only your index finger straight up.",
+      "Keep the other fingers and the thumb folded."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "2",
+    "category": "Numbers",
+    "title": "2",
+    "subtitle": "Two",
+    "description": "Index and middle fingers up in a V shape.",
+    "imageUrl": "media/second.png",
+    "videoUrl": "",
+    "pattern": "01100",
+    "shapeCheck": false,
+    "steps": [
+      "Make a fist.",
+      "Raise the index and middle fingers and spread them a little.",
+      "Hold the ring finger, pinky and thumb folded."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "3",
+    "category": "Numbers",
+    "title": "3",
+    "subtitle": "Three",
+    "description": "Thumb, index and middle fingers are out. Ring finger and pinky are folded.",
+    "imageUrl": "media/third.png",
+    "videoUrl": "",
+    "pattern": "11100",
+    "shapeCheck": false,
+    "steps": [
+      "Fold the ring finger and pinky into the palm.",
+      "Raise the index and middle fingers.",
+      "Stick the thumb out to the side."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "4",
+    "category": "Numbers",
+    "title": "4",
+    "subtitle": "Four",
+    "description": "Four fingers up, thumb folded across the palm.",
+    "imageUrl": "media/four.png",
+    "videoUrl": "",
+    "pattern": "01111",
+    "shapeCheck": false,
+    "steps": [
+      "Open your hand.",
+      "Raise index, middle, ring and pinky.",
+      "Fold the thumb across the palm."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "5",
+    "category": "Numbers",
+    "title": "5",
+    "subtitle": "Five",
+    "description": "Open palm, all five fingers spread.",
+    "imageUrl": "media/fifth.png",
+    "videoUrl": "",
+    "pattern": "11111",
+    "shapeCheck": false,
+    "steps": [
+      "Open your hand with the palm to the camera.",
+      "Spread all five fingers."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "6",
+    "category": "Numbers",
+    "title": "6",
+    "subtitle": "Six",
+    "description": "Index, middle and ring fingers up. The thumb touches the pinky.",
+    "imageUrl": "media/six.png",
+    "videoUrl": "",
+    "pattern": "01110",
+    "shapeCheck": false,
+    "steps": [
+      "Raise the index, middle and ring fingers.",
+      "Bend the pinky down.",
+      "Touch the tip of the thumb to the tip of the pinky."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "7",
+    "category": "Numbers",
+    "title": "7",
+    "subtitle": "Seven",
+    "description": "Index, middle and pinky up. The thumb touches the ring finger.",
+    "imageUrl": "media/seven.png",
+    "videoUrl": "",
+    "pattern": "01101",
+    "shapeCheck": false,
+    "steps": [
+      "Raise the index, middle and pinky.",
+      "Bend the ring finger down.",
+      "Touch the thumb to the ring finger."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "8",
+    "category": "Numbers",
+    "title": "8",
+    "subtitle": "Eight",
+    "description": "Index, ring and pinky up. The thumb touches the middle finger.",
+    "imageUrl": "media/eight.png",
+    "videoUrl": "",
+    "pattern": "01011",
+    "shapeCheck": false,
+    "steps": [
+      "Raise the index, ring and pinky.",
+      "Bend the middle finger down.",
+      "Touch the thumb to the middle finger."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "9",
+    "category": "Numbers",
+    "title": "9",
+    "subtitle": "Nine",
+    "description": "Middle, ring and pinky up. The thumb touches the index finger.",
+    "imageUrl": "media/nine.png",
+    "videoUrl": "",
+    "pattern": "00111",
+    "shapeCheck": false,
+    "steps": [
+      "Raise the middle, ring and pinky.",
+      "Bend the index finger down.",
+      "Touch the thumb to the index finger."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "10",
+    "category": "Numbers",
+    "title": "10",
+    "subtitle": "Ten",
+    "description": "A fist with the thumb pointing up.",
+    "imageUrl": "media/ten.png",
+    "videoUrl": "",
+    "pattern": "10000",
+    "shapeCheck": false,
+    "steps": [
+      "Make a fist.",
+      "Point the thumb straight up."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "a",
+    "category": "Alphabet",
+    "title": "A",
+    "subtitle": "Letter",
+    "description": "Fist with the thumb resting against the side of the index finger.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Make a fist.",
+      "Rest the thumb against the side of the index finger, pointing up."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "b",
+    "category": "Alphabet",
+    "title": "B",
+    "subtitle": "Letter",
+    "description": "Four fingers straight up and together, thumb folded across the palm.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Hold four fingers straight up, pressed together.",
+      "Fold the thumb across the palm."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "c",
+    "category": "Alphabet",
+    "title": "C",
+    "subtitle": "Letter",
+    "description": "Curve your whole hand into the shape of the letter C.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Curve all fingers together.",
+      "Curve the thumb to match, so the hand makes a C."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "d",
+    "category": "Alphabet",
+    "title": "D",
+    "subtitle": "Letter",
+    "description": "Index finger up. The other fingers curl and touch the thumb, making a small circle.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Point the index finger up.",
+      "Curl the other three fingers down to touch the thumb tip.",
+      "The thumb and fingers make a small circle."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "e",
+    "category": "Alphabet",
+    "title": "E",
+    "subtitle": "Letter",
+    "description": "Fingers bent down so the tips touch the thumb, which is tucked underneath.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Bend all four fingers down.",
+      "Tuck the thumb under the fingertips."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "f",
+    "category": "Alphabet",
+    "title": "F",
+    "subtitle": "Letter",
+    "description": "Thumb and index finger touch to make a circle. The other three fingers point up.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Touch the tips of the thumb and index finger to make a circle.",
+      "Raise the other three fingers straight up."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "g",
+    "category": "Alphabet",
+    "title": "G",
+    "subtitle": "Letter",
+    "description": "Index finger and thumb point sideways, parallel to each other. Other fingers closed.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Turn the hand sideways.",
+      "Point the index finger forward with the thumb parallel to it.",
+      "Close the other fingers."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "h",
+    "category": "Alphabet",
+    "title": "H",
+    "subtitle": "Letter",
+    "description": "Index and middle fingers point sideways together. Other fingers closed.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Turn the hand sideways.",
+      "Point the index and middle fingers forward, together.",
+      "Close the other fingers and the thumb."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "i",
+    "category": "Alphabet",
+    "title": "I",
+    "subtitle": "Letter",
+    "description": "Fist with the pinky pointing up.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Make a fist.",
+      "Raise only the pinky."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "j",
+    "category": "Alphabet",
+    "title": "J",
+    "subtitle": "Letter",
+    "description": "Pinky up like the letter I, then draw a J in the air.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": false,
+    "steps": [
+      "Make the I handshape: fist with the pinky up.",
+      "Draw a J in the air: down, then curve to the left."
+    ],
+    "isVerified": false,
+    "motion": true
+  },
+  {
+    "id": "k",
+    "category": "Alphabet",
+    "title": "K",
+    "subtitle": "Letter",
+    "description": "Index and middle fingers up in a V. The thumb touches the base of the middle finger.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Raise the index and middle fingers in a V.",
+      "Place the thumb on the base of the middle finger.",
+      "Fold the ring finger and pinky."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "l",
+    "category": "Alphabet",
+    "title": "L",
+    "subtitle": "Letter",
+    "description": "Thumb and index finger make an L shape. Other fingers closed.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Point the index finger up.",
+      "Stick the thumb out to the side, making an L.",
+      "Fold the other three fingers."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "m",
+    "category": "Alphabet",
+    "title": "M",
+    "subtitle": "Letter",
+    "description": "Fist with the thumb tucked under the index, middle and ring fingers.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Make a fist.",
+      "Tuck the thumb under the index, middle and ring fingers."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "n",
+    "category": "Alphabet",
+    "title": "N",
+    "subtitle": "Letter",
+    "description": "Fist with the thumb tucked under the index and middle fingers.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Make a fist.",
+      "Tuck the thumb under the index and middle fingers."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "o",
+    "category": "Alphabet",
+    "title": "O",
+    "subtitle": "Letter",
+    "description": "All fingers curve and touch the thumb, making the shape of the letter O.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Curve all fingers.",
+      "Touch the fingertips to the thumb tip, making an O."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "p",
+    "category": "Alphabet",
+    "title": "P",
+    "subtitle": "Letter",
+    "description": "Like K, but the hand points down.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Make the K handshape (V with the thumb on the middle finger).",
+      "Turn the hand so the fingers point down."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "q",
+    "category": "Alphabet",
+    "title": "Q",
+    "subtitle": "Letter",
+    "description": "Like G, but the hand points down.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Make the G handshape (index and thumb parallel).",
+      "Turn the hand so they point down."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "r",
+    "category": "Alphabet",
+    "title": "R",
+    "subtitle": "Letter",
+    "description": "Index and middle fingers up and crossed.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Raise the index and middle fingers.",
+      "Cross the middle finger over the index finger.",
+      "Fold the other fingers."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "s",
+    "category": "Alphabet",
+    "title": "S",
+    "subtitle": "Letter",
+    "description": "Fist with the thumb across the front of the fingers.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Make a fist.",
+      "Place the thumb across the front of the fingers."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "t",
+    "category": "Alphabet",
+    "title": "T",
+    "subtitle": "Letter",
+    "description": "Fist with the thumb tucked between the index and middle fingers.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Make a fist.",
+      "Tuck the thumb between the index and middle fingers."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "u",
+    "category": "Alphabet",
+    "title": "U",
+    "subtitle": "Letter",
+    "description": "Index and middle fingers up and held together.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Raise the index and middle fingers, pressed together.",
+      "Hold the thumb over the ring finger and pinky."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "v",
+    "category": "Alphabet",
+    "title": "V",
+    "subtitle": "Letter",
+    "description": "Index and middle fingers up and spread apart (a V).",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Raise the index and middle fingers and spread them (a V).",
+      "Hold the thumb over the ring finger and pinky."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "w",
+    "category": "Alphabet",
+    "title": "W",
+    "subtitle": "Letter",
+    "description": "Index, middle and ring fingers up and spread. Thumb holds the pinky.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Raise the index, middle and ring fingers and spread them.",
+      "Hold the pinky down with the thumb."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "x",
+    "category": "Alphabet",
+    "title": "X",
+    "subtitle": "Letter",
+    "description": "Index finger bent like a hook. Other fingers closed.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Make a fist.",
+      "Bend the index finger like a hook."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "y",
+    "category": "Alphabet",
+    "title": "Y",
+    "subtitle": "Letter",
+    "description": "Thumb and pinky stick out. The other fingers are closed.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": true,
+    "steps": [
+      "Stick out the thumb and the pinky.",
+      "Fold the other three fingers."
+    ],
+    "isVerified": false,
+    "motion": false
+  },
+  {
+    "id": "z",
+    "category": "Alphabet",
+    "title": "Z",
+    "subtitle": "Letter",
+    "description": "Draw the letter Z in the air with your index finger.",
+    "imageUrl": "",
+    "videoUrl": "",
+    "pattern": "",
+    "shapeCheck": false,
+    "steps": [
+      "Point the index finger.",
+      "Draw a Z in the air: right, diagonal down-left, right again."
+    ],
+    "isVerified": false,
+    "motion": true
+  }
+]

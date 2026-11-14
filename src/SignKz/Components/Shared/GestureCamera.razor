@@ -1,0 +1,79 @@
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+<div class="camera-box">
+    <video id="@_videoId" autoplay playsinline muted></video>
+    <canvas id="@_canvasId"></canvas>
+    @if (_loading)
+    {
+        <div class="camera-overlay"><div class="spinner"></div><span>Starting camera...</span></div>
+    }
+</div>
+
+@if (_loading)
+{
+    <p class="muted small-text">The first start can take a few seconds while the hand model downloads.</p>
+}
+@if (_error != "")
+{
+    <div class="notice error">@_error</div>
+}
+
+@code {
+    // Sends the detected hand pose to the page. null means "no hand in the picture".
+    [Parameter] public EventCallback<HandPose?> OnPose { get; set; }
+
+    private readonly string _videoId = "video-" + Guid.NewGuid().ToString("N");
+    private readonly string _canvasId = "canvas-" + Guid.NewGuid().ToString("N");
+    private DotNetObjectReference<GestureCamera>? _self;
+    private bool _loading = true;
+    private string _error = "";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        _self = DotNetObjectReference.Create(this);
+        string result = await JS.InvokeAsync<string>("signCamera.start", _videoId, _canvasId, _self);
+
+        _loading = false;
+        _error = GetErrorText(result);
+        StateHasChanged();
+    }
+
+    private static string GetErrorText(string code)
+    {
+        if (code == "ok") return "";
+        if (code == "denied") return "Camera access was denied. Allow the camera in your browser settings and refresh the page.";
+        if (code == "nocamera") return "No camera was found. You can still use the Quiz and the lessons.";
+        if (code == "modelfail") return "The hand detection model could not be loaded. Check your internet connection.";
+        return "The camera could not be started.";
+    }
+
+    // Called from JavaScript about 10 times per second.
+    [JSInvokable]
+    public async Task OnLandmarks(double[] data)
+    {
+        HandPose? pose = HandPose.FromLandmarks(data);
+        await OnPose.InvokeAsync(pose);
+    }
+
+    [JSInvokable]
+    public async Task OnNoHand()
+    {
+        await OnPose.InvokeAsync(null);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("signCamera.stop");
+        }
+        catch (JSDisconnectedException)
+        {
+            // The browser tab is already closed. Nothing to stop.
+        }
+        _self?.Dispose();
+    }
+}

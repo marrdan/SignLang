@@ -1,0 +1,23 @@
+<div class="bar-row">
+    <span>@Label</span>
+    <span>@Value / @Max</span>
+</div>
+<div class="bar">
+    <div class="bar-fill" style="width: @Percent%"></div>
+</div>
+
+@code {
+    [Parameter] public string Label { get; set; } = "";
+    [Parameter] public int Value { get; set; }
+    [Parameter] public int Max { get; set; } = 100;
+
+    private int Percent
+    {
+        get
+        {
+            if (Max <= 0) return 0;
+            int value = Value * 100 / Max;
+            return value > 100 ? 100 : value;
+        }
+    }
+}

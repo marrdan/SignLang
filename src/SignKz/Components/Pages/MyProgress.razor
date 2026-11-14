@@ -1,0 +1,97 @@
+@page "/progress"
+@inject ISignRepository Signs
+@inject ProgressService Progress
+@inject UserState User
+
+<PageTitle>Profile - SignKz</PageTitle>
+
+@if (!User.IsLoggedIn)
+{
+    <h1>Profile</h1>
+    <LoginNotice />
+}
+else if (_progress != null && _level != null)
+{
+    <div class="profile-head card">
+        <div class="avatar huge">@_progress.Avatar</div>
+        <div class="profile-info">
+            <h1>@_progress.Name</h1>
+            <span class="pill">Level @_level.Number · @_level.Name</span>
+            <div class="level-bar">
+                @if (_level.NextLevelPoints != null)
+                {
+                    <ProgressBar Label="@("Next level at " + _level.NextLevelPoints + " points")" Value="_progress.Points - _level.MinPoints" Max="_level.NextLevelPoints.Value - _level.MinPoints" />
+                }
+                else
+                {
+                    <p class="muted">Top level reached! 👑</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="grid four">
+        <div class="card stat"><span>⭐</span><b>@_progress.Points</b><small>Points</small></div>
+        <div class="card stat"><span>🔥</span><b>@_progress.StreakDays</b><small>Day streak</small></div>
+        <div class="card stat"><span>🎯</span><b>@_progress.AccuracyPercent%</b><small>Accuracy</small></div>
+        <div class="card stat"><span>✅</span><b>@_progress.LearnedSigns.Count</b><small>Signs learned</small></div>
+    </div>
+
+    <div class="card">
+        <ProgressBar Label="Course progress" Value="_progress.LearnedSigns.Count" Max="_total" />
+    </div>
+
+    <h2>Badges</h2>
+    <div class="grid">
+        @foreach (Achievement badge in _badges)
+        {
+            <div class="card badge-card @(badge.Unlocked ? "" : "locked")">
+                <div class="badge-icon">@(badge.Unlocked ? badge.Icon : "🔒")</div>
+                <b>@badge.Title</b>
+                <small class="muted">@badge.Description</small>
+            </div>
+        }
+    </div>
+
+    <h2>Learned signs</h2>
+    @if (_progress.LearnedSigns.Count == 0)
+    {
+        <div class="empty">Nothing yet. <a href="lessons">Start with a lesson!</a></div>
+    }
+    else
+    {
+        <div class="choice-list">
+            @foreach (string id in _progress.LearnedSigns)
+            {
+                Sign? sign = Signs.GetById(id);
+                if (sign != null)
+                {
+                    <span class="choice done"><b>@sign.Title</b></span>
+                }
+            }
+        </div>
+    }
+}
+
+@code {
+    private UserProgress? _progress;
+    private LevelInfo? _level;
+    private List<Achievement> _badges = new List<Achievement>();
+    private int _total;
+
+    protected override void OnInitialized()
+    {
+        List<Sign> all = Signs.GetAll();
+        _total = all.Count;
+
+        if (User.IsLoggedIn)
+        {
+            _progress = Progress.Get(User.Name);
+            if (_progress != null)
+            {
+                _level = LevelCalculator.Get(_progress.Points);
+                _badges = AchievementService.Get(_progress, all);
+            }
+        }
+    }
+}

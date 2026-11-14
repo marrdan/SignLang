@@ -1,0 +1,86 @@
+@page "/guide"
+@inject ISignRepository Signs
+@inject UserState User
+
+<PageTitle>Guide - SignKz</PageTitle>
+
+<div class="page-head">
+    <div>
+        <h1>Guide</h1>
+        <p class="muted">How to show every sign, step by step. Copy the picture, then practice with your camera.</p>
+    </div>
+</div>
+
+<div class="tabs">
+    @foreach (string tab in _tabs)
+    {
+        <button class="tab @(tab == _tab ? "active" : "")" @onclick="() => _tab = tab">@tab</button>
+    }
+</div>
+
+@{
+    List<Sign> shown = GetShown();
+}
+
+<div class="guide-jump">
+    @foreach (Sign sign in shown)
+    {
+        <a class="choice" href="guide#s-@(sign.Id)"><b>@sign.Title</b></a>
+    }
+</div>
+
+@foreach (Sign sign in shown)
+{
+    <section class="card guide-item" id="s-@(sign.Id)">
+        <div class="guide-photo">
+            <SignVisual Sign="sign" />
+        </div>
+        <div class="guide-body">
+            <span class="pill">@(sign.Category == "Numbers" ? "Number" : "Letter") @sign.Title@(sign.Category == "Numbers" ? " · " + sign.Subtitle : "")</span>
+            <h2 class="guide-title">@sign.Title</h2>
+            <p>@sign.Description</p>
+
+            @if (sign.HasSteps)
+            {
+                <ol class="guide-steps">
+                    @foreach (string step in sign.Steps)
+                    {
+                        <li>@step</li>
+                    }
+                </ol>
+            }
+
+            @if (sign.HasPattern)
+            {
+                <div class="fingers" title="Thumb, index, middle, ring, pinky">
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        <span class="finger @(sign.Pattern[i] == '1' ? "up" : "")">
+                            <i></i>
+                            <small>@_fingerNames[i]</small>
+                        </span>
+                    }
+                </div>
+            }
+
+            <a class="btn small" href="practice/@sign.Id">Practice @sign.Title</a>
+        </div>
+    </section>
+}
+
+@code {
+    private readonly string[] _fingerNames = { "Thumb", "Index", "Middle", "Ring", "Pinky" };
+    private readonly string[] _tabs = { "Numbers", "Alphabet" };
+    private string _tab = "Numbers";
+    private List<Sign> _signs = new List<Sign>();
+
+    protected override void OnInitialized()
+    {
+        _signs = Signs.GetAll();
+    }
+
+    private List<Sign> GetShown()
+    {
+        return _signs.FindAll(s => s.Category == _tab);
+    }
+}

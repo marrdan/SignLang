@@ -1,0 +1,129 @@
+@page "/quiz"
+@inject ISignRepository Signs
+@inject ProgressService Progress
+@inject UserState User
+
+<PageTitle>Quiz - SignKz</PageTitle>
+
+<div class="page-head">
+    <div>
+        <h1>Quiz</h1>
+        <p class="muted">Look at the sign and pick the right answer. No camera needed.</p>
+    </div>
+</div>
+
+@if (!User.IsLoggedIn)
+{
+    <LoginNotice />
+}
+else if (_quizSigns.Count < 4)
+{
+    <div class="empty">
+        <h3>Not enough signs for a quiz yet</h3>
+        <p class="muted">The quiz needs at least 4 signs with a photo. Add photos to <code>wwwroot/media</code>.</p>
+    </div>
+}
+else if (_finished)
+{
+    <div class="card narrow center">
+        <div class="success-icon">@(_score >= 8 ? "🏆" : _score >= 5 ? "👏" : "💪")</div>
+        <h2>Quiz finished!</h2>
+        <p class="big">@_score / @TotalQuestions</p>
+        <p class="muted">@(_score >= 8 ? "Amazing result!" : _score >= 5 ? "Nice work, keep going!" : "Practice a bit more and try again.")</p>
+        <button class="btn" @onclick="Restart">Play again</button>
+        <a class="btn ghost" href="lessons">Back to lessons</a>
+    </div>
+}
+else if (_question != null)
+{
+    <div class="card narrow">
+        <ProgressBar Label="@("Question " + (_asked + 1))" Value="_asked" Max="TotalQuestions" />
+        <h3 class="center">Which sign is this?</h3>
+        <SignVisual Sign="_question.Correct" />
+
+        <div class="options">
+            @foreach (Sign option in _question.Options)
+            {
+                <button class="option @GetOptionClass(option)" @onclick="() => Choose(option)">@option.Title</button>
+            }
+        </div>
+
+        @if (_chosenId != null)
+        {
+            <p class="center feedback">@(_chosenId == _question.Correct.Id ? "✓ Correct! +" + ProgressService.QuizPoints : "✗ Not quite. The answer is " + _question.Correct.Title)</p>
+            <button class="btn full" @onclick="Next">@(_asked + 1 >= TotalQuestions ? "See result" : "Next question →")</button>
+        }
+    </div>
+}
+
+@code {
+    private const int TotalQuestions = 10;
+
+    private List<Sign> _quizSigns = new List<Sign>();
+    private readonly Random _random = new Random();
+    private QuizQuestion? _question;
+    private string? _chosenId;
+    private int _asked;
+    private int _score;
+    private bool _finished;
+
+    protected override void OnInitialized()
+    {
+        // Only signs that the user can SEE (with a photo) can be used in a quiz.
+        foreach (Sign sign in Signs.GetAll())
+        {
+            if (sign.HasVisual) _quizSigns.Add(sign);
+        }
+
+        if (_quizSigns.Count >= 4)
+        {
+            NewQuestion();
+        }
+    }
+
+    private void NewQuestion()
+    {
+        _question = QuizBuilder.Build(_quizSigns, _random);
+        _chosenId = null;
+    }
+
+    private void Choose(Sign option)
+    {
+        if (_chosenId != null || _question == null) return;
+
+        _chosenId = option.Id;
+        bool isCorrect = option.Id == _question.Correct.Id;
+        if (isCorrect) _score++;
+
+        Progress.RegisterQuizAnswer(User.Name, _question.Correct.Id, isCorrect);
+    }
+
+    private void Next()
+    {
+        _asked++;
+        if (_asked >= TotalQuestions)
+        {
+            _finished = true;
+        }
+        else
+        {
+            NewQuestion();
+        }
+    }
+
+    private void Restart()
+    {
+        _asked = 0;
+        _score = 0;
+        _finished = false;
+        NewQuestion();
+    }
+
+    private string GetOptionClass(Sign option)
+    {
+        if (_chosenId == null || _question == null) return "";
+        if (option.Id == _question.Correct.Id) return "right";
+        if (option.Id == _chosenId) return "wrong";
+        return "dim";
+    }
+}

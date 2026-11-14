@@ -1,0 +1,16 @@
+@* Shows the photo if there is one (set imageUrl in Data/signs.json or drop a file into wwwroot/media).
+   Otherwise it shows only the big letter or number, with no background picture and no extra text. *@
+@if (Sign.HasImage)
+{
+    <img class="visual-img" src="@Sign.ImageUrl" alt="Sign for @Sign.Title" loading="lazy" />
+}
+else
+{
+    <div class="visual-box">
+        <span class="big-letter">@Sign.Title</span>
+    </div>
+}
+
+@code {
+    [Parameter] public Sign Sign { get; set; } = new Sign();
+}
