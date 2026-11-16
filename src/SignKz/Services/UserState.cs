@@ -20,3 +20,4 @@ public class UserState
         Changed?.Invoke();
     }
 }
+

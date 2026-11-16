@@ -2,7 +2,7 @@ namespace SignKz.Models;
 
 public static class Avatars
 {
-    public static readonly string[] All = { "🦊", "🐼", "🦁", "🐯", "🐨", "🐸", "🦉", "🐙" };
+    public static readonly string[] All = { "🦊", "🐼", "🦁", "🐯", "🐨", "🐸", "🦉", "🐙" , " "};
 
     public const string Default = "🦊";
 

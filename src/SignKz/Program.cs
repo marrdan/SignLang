@@ -11,6 +11,7 @@ string signsPath = Path.Combine(contentRoot, "Data", "signs.json");
 string mediaPath = Path.Combine(contentRoot, "wwwroot", "media");
 string progressPath = Path.Combine(contentRoot, "App_Data", "progress.json");
 
+
 builder.Services.AddSingleton<ISignRepository>(new SignRepository(signsPath, mediaPath));
 builder.Services.AddSingleton<IProgressStore>(new JsonProgressStore(progressPath));
 builder.Services.AddSingleton<ProgressService>();

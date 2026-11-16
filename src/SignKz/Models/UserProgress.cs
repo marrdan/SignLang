@@ -24,8 +24,7 @@ public class UserProgress
         }
     }
 
-    // Returns a separate copy, so the UI cannot change the stored data by accident.
-    // The password data is not copied: the UI never needs it.
+
     public UserProgress Copy()
     {
         UserProgress copy = new UserProgress();

@@ -3,22 +3,12 @@ using SignKz.Models;
 namespace SignKz.Services;
 
 // Recognizes the letters of the fingerspelling alphabet from the 21 hand points.
-// The numbers only need "which fingers are up", but letters need more: how much each finger is bent,
-// where the thumb is, which way the hand points. So this class uses the 3D "world" points.
-//
-// Two ways to check a letter:
-//   Classify(pose)         strict: "which letter is this?" (null if none fits)
-//   Matches(pose, letter)  strict first, then a LOOSE check ("approximately right") for every letter A-Y.
-//                          Used when the person practices one chosen letter.
-//
-// J and Z need motion: see MotionTracker. The fist letters (A, E, M, N, S, T) look almost the same,
-// so they are the least reliable. All thresholds are in RecognizerSettings.
 public static class LetterClassifier
 {
     private enum Finger { Open, Curved, Closed }
     private enum Direction { Up, Side, Down }
 
-    // All measurements of one hand, calculated once. Distances are divided by the palm size.
+
     private class Features
     {
         public double[] World = new double[63];
@@ -30,6 +20,7 @@ public static class LetterClassifier
         public double BendRing;
         public double BendPinky;
 
+//distance between thumb tip and other fingers
         public double ThumbFromIndexBase;
         public double ThumbToIndexTip;
         public double ThumbToMiddleTip;
@@ -44,9 +35,9 @@ public static class LetterClassifier
         public double H;
     }
 
-    // ---------------------------------------------------------------- public API
+    
 
-    // Returns a lowercase letter id ("a" ... "y") or null when no letter fits.
+   
     public static string? Classify(HandPose? pose)
     {
         Features? f = Measure(pose);
@@ -64,7 +55,7 @@ public static class LetterClassifier
         return MatchesLoose(f, letter);
     }
 
-    // Is the hand in the starting shape of a moving letter? J starts like I (pinky up), Z with one finger pointing.
+
     public static bool HasMotionShape(HandPose? pose, string letter)
     {
         Features? f = Measure(pose);
@@ -84,7 +75,8 @@ public static class LetterClassifier
         return false;
     }
 
-    // ---------------------------------------------------------------- measuring
+
+//measure
 
     private static Features? Measure(HandPose? pose)
     {
@@ -116,7 +108,7 @@ public static class LetterClassifier
         f.Direction = GetDirection(img);
 
         double[] across = Normalize(Sub(Point(w, 17), Point(w, 5)));
-        double[] along = Normalize(Sub(Point(w, 9), Point(w, 0)));
+        double[] along = Normalize(Sub(Point(w, 9), Point(w, 0)));// orientation of the hand
         double[] thumb = Sub(Point(w, 4), Point(w, 5));
         f.U = Dot(thumb, across) / s;
         f.H = Dot(thumb, along) / s;
@@ -139,7 +131,7 @@ public static class LetterClassifier
         return Finger.Closed;
     }
 
-    // ---------------------------------------------------------------- strict rules
+    // strcit rules
 
     private static string? ClassifyStrict(Features f)
     {

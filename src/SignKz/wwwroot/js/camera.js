@@ -20,7 +20,7 @@ window.signCamera = (function () {
     let lastSend = 0;
 
     async function loadLandmarker() {
-        if (landmarker) return;
+        if (landmarker) return ;
         const vision = await import(BASE + "/vision_bundle.mjs");
         const files = await vision.FilesetResolver.forVisionTasks(BASE + "/wasm");
         landmarker = await vision.HandLandmarker.createFromOptions(files, {
@@ -64,8 +64,6 @@ window.signCamera = (function () {
                 const points = result.landmarks[0];
                 draw(canvas, points);
 
-                // Picture points first (x is multiplied by the aspect ratio, so distances are not stretched),
-                // then the 3D "world" points. C# splits them again (see HandPose.FromLandmarks).
                 const aspect = (video.videoWidth && video.videoHeight) ? video.videoWidth / video.videoHeight : 4 / 3;
                 const flat = [];
                 for (const p of points) {
@@ -85,7 +83,7 @@ window.signCamera = (function () {
         requestAnimationFrame(function () { loop(video, canvas, dotnetRef); });
     }
 
-    // Returns: "ok", "denied", "nocamera", "modelfail" or "error".
+  
     async function start(videoId, canvasId, dotnetRef) {
         const video = document.getElementById(videoId);
         const canvas = document.getElementById(canvasId);

@@ -1,7 +1,7 @@
 namespace SignKz.Services;
 
-// Counts how many frames in a row the user shows the right sign.
-// This avoids false success when the hand just passes through the pose.
+//for avoid fail access to sign 
+
 public class HoldTracker
 {
     private readonly int _framesNeeded;

@@ -20,7 +20,7 @@
 }
 
 @code {
-    // Sends the detected hand pose to the page. null means "no hand in the picture".
+
     [Parameter] public EventCallback<HandPose?> OnPose { get; set; }
 
     private readonly string _videoId = "video-" + Guid.NewGuid().ToString("N");

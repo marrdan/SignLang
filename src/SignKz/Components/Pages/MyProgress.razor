@@ -20,7 +20,8 @@ else if (_progress != null && _level != null)
             <div class="level-bar">
                 @if (_level.NextLevelPoints != null)
                 {
-                    <ProgressBar Label="@("Next level at " + _level.NextLevelPoints + " points")" Value="_progress.Points - _level.MinPoints" Max="_level.NextLevelPoints.Value - _level.MinPoints" />
+                    <ProgressBar Label="@("Next level at " + _level.NextLevelPoints + " points")" Value="_progress.Points
+                     - _level.MinPoints" Max="_level.NextLevelPoints.Value - _level.MinPoints" />
                 }
                 else
                 {

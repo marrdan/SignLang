@@ -2,6 +2,9 @@ using System.Security.Cryptography;
 
 namespace SignKz.Services;
 
+
+
+
 // Passwords are never stored as text. We store a random salt and a PBKDF2 hash.
 public static class PasswordHasher
 {
@@ -20,6 +23,7 @@ public static class PasswordHasher
     public static bool Verify(string password, string hash, string salt)
     {
         if (hash.Length == 0 || salt.Length == 0) return false;
+
 
         try
         {

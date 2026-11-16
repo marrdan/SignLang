@@ -1,7 +1,5 @@
 using SignKz.Models;
-
 namespace SignKz.Services;
-
 public static class QuizBuilder
 {
     // One correct sign + 3 wrong signs, in random order.
@@ -17,6 +15,7 @@ public static class QuizBuilder
         List<Sign> options = new List<Sign>();
         options.Add(correct);
 
+
         while (options.Count < 4)
         {
             Sign candidate = allSigns[random.Next(allSigns.Count)];
@@ -26,7 +25,7 @@ public static class QuizBuilder
             }
         }
 
-        // Shuffle (Fisher-Yates)
+        // Shuffle the options so the correct answer is not always first.
         for (int i = options.Count - 1; i > 0; i--)
         {
             int j = random.Next(i + 1);

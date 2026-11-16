@@ -24,12 +24,11 @@ public class JsonProgressStore : IProgressStore
         try
         {
             string json = File.ReadAllText(_filePath);
-            List<UserProgress>? users = JsonSerializer.Deserialize<List<UserProgress>>(json);
+            List<UserProgress>? users = JsonSerializer.Deserialize<List<UserProgress>>(json); // turns json into a list of UserProgress objects
             return users ?? new List<UserProgress>();
         }
         catch (JsonException)
         {
-            // The file is broken. Keep a copy and start with an empty list.
             File.Move(_filePath, _filePath + ".bad", true);
             return new List<UserProgress>();
         }
@@ -45,9 +44,8 @@ public class JsonProgressStore : IProgressStore
 
         JsonSerializerOptions options = new JsonSerializerOptions();
         options.WriteIndented = true;
-        string json = JsonSerializer.Serialize(users, options);
+        string json = JsonSerializer.Serialize(users, options); // turn list of UserProgress objects into json text
 
-        // Write to a temp file first, so the main file is not damaged if the app stops.
         string tempPath = _filePath + ".tmp";
         File.WriteAllText(tempPath, json);
         File.Move(tempPath, _filePath, true);

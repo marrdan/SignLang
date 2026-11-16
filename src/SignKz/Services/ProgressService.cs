@@ -54,8 +54,7 @@ public class ProgressService
         }
     }
 
-    // Signs in with name + password. The error text is the same for "no such user" and "wrong password",
-    // so nobody can find out which names exist.
+
     public UserProgress Login(string? name, string? password)
     {
         string cleanName = (name ?? "").Trim();
@@ -224,8 +223,8 @@ public class ProgressService
             {
                 all.Add(user.Copy());
             }
-            all.Sort((a, b) => b.Points.CompareTo(a.Points));
 
+            all.Sort((a, b) => b.Points.CompareTo(a.Points));
             if (all.Count > count)
             {
                 all = all.GetRange(0, count);

@@ -50,7 +50,8 @@ else if (_question != null)
 
         @if (_chosenId != null)
         {
-            <p class="center feedback">@(_chosenId == _question.Correct.Id ? "✓ Correct! +" + ProgressService.QuizPoints : "✗ Not quite. The answer is " + _question.Correct.Title)</p>
+            <p class="center feedback">@(_chosenId == _question.Correct.Id ? "✓ Correct! +" + ProgressService.QuizPoints
+                 : "✗ Not quite. The answer is " + _question.Correct.Title)</p>
             <button class="btn full" @onclick="Next">@(_asked + 1 >= TotalQuestions ? "See result" : "Next question →")</button>
         }
     </div>

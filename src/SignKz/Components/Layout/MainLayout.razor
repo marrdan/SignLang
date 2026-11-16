@@ -1,5 +1,5 @@
 @inherits LayoutComponentBase
-@implements IDisposable
+@implements IDisposable 
 @inject UserState User
 @inject ProgressService Progress
 @inject ProtectedLocalStorage Storage
@@ -89,14 +89,15 @@
         }
     }
 
-    // Restore the name from the browser, so the user stays signed in after a page refresh.
+
+    //  saving even there will be refresh
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender) return;
 
         try
         {
-            var result = await Storage.GetAsync<string>("userName");
+            var result = await Storage.GetAsync<string>("userName"); //await when browser appeals to js
             if (result.Success && !string.IsNullOrWhiteSpace(result.Value))
             {
                 // The value is protected (encrypted) by ASP.NET, so the browser cannot change it.

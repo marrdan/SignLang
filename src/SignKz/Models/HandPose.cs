@@ -1,6 +1,6 @@
 namespace SignKz.Models;
 
-// Which fingers are up. It is built from the 21 hand points (landmarks) sent by the camera script.
+
 public class HandPose
 {
     public bool Thumb { get; set; }
@@ -9,8 +9,7 @@ public class HandPose
     public bool Ring { get; set; }
     public bool Pinky { get; set; }
 
-    // The raw points, used by LetterClassifier (letters need the full hand shape, not only the fingers).
-    // Image = 21 x (x, y, z) in picture units. World = 21 x (x, y, z) in real 3D units (meters). World can be null.
+   
     public double[]? Image { get; set; }
     public double[]? World { get; set; }
 
@@ -26,8 +25,8 @@ public class HandPose
         return result;
     }
 
-    // data = 21 points * 3 numbers (x, y, z) = 63 numbers. The camera script can add 63 more numbers
-    // (world points) after them. Returns null if the data is wrong.
+
+    
     public static HandPose? FromLandmarks(double[]? data)
     {
         if (data == null || data.Length < 63)
@@ -72,13 +71,13 @@ public class HandPose
             return false;
         }
 
-        // The thumb tip must be far from the pinky side and far from the index base.
+
         bool awayFromPinky = Distance(data, 4, 17) > Distance(data, 3, 17);
         bool awayFromIndex = Distance(data, 4, 5) > palmSize * RecognizerSettings.ThumbSpread;
         return awayFromPinky && awayFromIndex;
     }
 
-    // Distance between two points on the screen (we ignore z, because it is not very exact).
+   
     private static double Distance(double[] data, int a, int b)
     {
         double dx = data[a * 3] - data[b * 3];

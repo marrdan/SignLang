@@ -2,17 +2,12 @@ using SignKz.Models;
 
 namespace SignKz.Services;
 
-// Checks the letters that are drawn in the air: J (pinky) and Z (index finger).
-// It remembers the path of the fingertip and checks the rough shape of that path:
-//   Z = a stroke to one side, a diagonal back down to the other side, a stroke to the first side again.
-//   J = a stroke down, then a curve to the side or up (a hook).
-// It does not care which side the person draws to (a mirrored picture works too).
-// The check is approximate on purpose: draw slowly, big, in front of the camera.
+// j and z
 public class MotionTracker
 {
-    private const int MaxPoints = 40;       // about 4 seconds of movement
+    private const int MaxPoints = 40;      
     private const int MinPoints = 6;
-    private const int MaxMissedFrames = 5;  // the path is forgotten if the hand is lost for longer
+    private const int MaxMissedFrames = 5;  
 
     private readonly List<double[]> _path = new List<double[]>();
     private double _palm;
@@ -75,7 +70,7 @@ public class MotionTracker
         }
     }
 
-    // How much of the letter was drawn, 0-100 (only the path length is counted).
+
     public int Percent(string letter)
     {
         if (_palm <= 0 || _path.Count < 2) return 0;
@@ -84,7 +79,7 @@ public class MotionTracker
         return value > 100 ? 100 : (int)value;
     }
 
-    // True when the latest movement looks like the letter.
+
     public bool Detect(string letter)
     {
         if (_palm <= 0 || _path.Count < MinPoints) return false;
@@ -139,6 +134,7 @@ public class MotionTracker
         return false;
     }
 
+
     private static double PathLength(List<double[]> path, int start)
     {
         double total = 0;
@@ -169,6 +165,7 @@ public class MotionTracker
         }
         return _path[_path.Count - 1];
     }
+    
 
     private static double Distance(double[] a, double[] b)
     {

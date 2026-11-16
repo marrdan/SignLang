@@ -28,20 +28,26 @@ public static class AchievementService
 
     private static Achievement Make(string icon, string title, string description, bool unlocked)
     {
+        
         Achievement a = new Achievement();
         a.Icon = icon;
         a.Title = title;
         a.Description = description;
         a.Unlocked = unlocked;
         return a;
+
     }
+
 
     private static int CountLearnedInCategory(UserProgress user, List<Sign> allSigns, string category)
     {
         int count = 0;
         foreach (Sign sign in allSigns)
         {
-            if (sign.Category == category && user.LearnedSigns.Contains(sign.Id)) count++;
+            if (sign.Category == category && user.LearnedSigns.Contains(sign.Id)) 
+            {
+                count++;
+            }
         }
         return count;
     }

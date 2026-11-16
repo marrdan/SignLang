@@ -11,9 +11,7 @@ public class Sign
     public string Subtitle { get; set; } = "";
     public string Description { get; set; } = "";
 
-    // Optional photo and video. Put your own links here, or drop files named like the sign id
-    // into wwwroot/media (for example 1.jpg or a.png) and they are found automatically.
-    // A file with another name (like first.png) can be set here: "media/first.png".
+
     public string ImageUrl { get; set; } = "";
     public string VideoUrl { get; set; } = "";
 

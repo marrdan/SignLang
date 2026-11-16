@@ -4,14 +4,12 @@ namespace SignKz.Services;
 
 public class GestureRecognizer : IGestureRecognizer
 {
-    // Looks only at the signs in the list. Pass signs of ONE category (numbers or letters),
-    // because a number and a letter can have the same finger state.
+
     public Sign? Recognize(HandPose? pose, List<Sign> signs)
     {
         if (pose == null) return null;
 
-        // 1. Signs with a finger pattern (the numbers).
-        string pattern = pose.ToPattern();
+        string pattern = pose.ToPattern(); // we can take like 01010 (each finger up or down) and check if it matches a sign that has a pattern.
         foreach (Sign sign in signs)
         {
             if (sign.HasPattern && sign.Pattern == pattern) return sign;
@@ -36,7 +34,7 @@ public class GestureRecognizer : IGestureRecognizer
         Sign? seen = Recognize(pose, signs);
         if (seen != null && seen.Id == target.Id) return true;
 
-        // Not an exact match: for letters, accept a close shape of the chosen letter.
+        
         return target.ShapeCheck && LetterClassifier.Matches(pose, target.Id);
     }
 }

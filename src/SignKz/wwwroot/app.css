@@ -217,7 +217,8 @@ code { background: #eeebff; padding: 1px 6px; border-radius: 6px; }
 .card-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; }
 .sign-card p { margin: 0; font-size: 0.9rem; }
 
-.visual-img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; background: #efecff; }
+.visual-img { width: 100%; height: auto; max-height: 380px; object-fit: contain; border-radius: 14px; background: #fff; }
+.sign-card .visual-img { height: 220px; max-height: none; background: #f6f4ff; }
 .visual-box { display: flex; align-items: center; justify-content: center; min-height: 150px; }
 .big-letter { font-size: 3.4rem; font-weight: 800; line-height: 1; color: var(--primary); }
 
